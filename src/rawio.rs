@@ -123,11 +123,8 @@ pub trait VarintWrite : Write {
     }
 }
 
-impl VarintRead for ::std::io::Cursor<Vec<u8>> { }
-impl VarintRead for ::std::net::TcpStream { }
-impl VarintWrite for ::std::io::Cursor<Vec<u8>> { }
-impl VarintWrite for ::std::net::TcpStream { }
-
+impl<R: ::std::io::Read + ?Sized> VarintRead for R {}
+impl<W: ::std::io::Write + ?Sized> VarintWrite for W {}
 
 #[cfg(test)]
 mod test {
