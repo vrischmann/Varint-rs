@@ -2,11 +2,10 @@
 
 use bit_utils::BitInformation;
 
-use std::io::{ Error, Read, Write, ErrorKind };
+use std::io::{Error, Read, Write, ErrorKind};
 
 /// Extends the I/O Read trait to provide functions to read (currently only 32-bit) Variable-Length Integers
-pub trait VarintRead : Read {
-
+pub trait VarintRead: Read {
     /// Reads a signed 32-bit Varint from this VarintRead
     fn read_signed_varint_32(&mut self) -> Result<i32, Error> {
 
@@ -44,9 +43,12 @@ pub trait VarintRead : Read {
                     if count == 1 {
                         next_byte = raw_buffer[0];
                     } else {
-                        return Err(Error::new(ErrorKind::Other, "Could not read one byte (end of stream?)"));
+                        return Err(Error::new(
+                            ErrorKind::Other,
+                            "Could not read one byte (end of stream?)",
+                        ));
                     }
-                },
+                }
                 Err(error) => {
                     return Err(error);
                 }
@@ -64,12 +66,10 @@ pub trait VarintRead : Read {
         }
 
     }
-
 }
 
 /// Extends the I/O Write trait to provide functions for writing (currently only 32-bit) variable-length integers
-pub trait VarintWrite : Write {
-
+pub trait VarintWrite: Write {
     /// Writes a signed varint 32 to this VarintWrite
     fn write_signed_varint_32(&mut self, value: i32) -> Result<(), Error> {
 
@@ -129,7 +129,7 @@ impl<W: ::std::io::Write + ?Sized> VarintWrite for W {}
 #[cfg(test)]
 mod test {
 
-    use super::{ VarintRead, VarintWrite };
+    use super::{VarintRead, VarintWrite};
 
     use std::io::Cursor;
 
